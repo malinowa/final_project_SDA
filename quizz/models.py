@@ -43,3 +43,12 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.text
+
+class User(models.Model):
+    name = models.CharField(max_length=255, default='')
+    surname = models.CharField(max_length=255, default='')
+    age = models.PositiveSmallIntegerField(default=0)
+
+
+    def __str__(self):
+        return f"{self.name} {self.surname}"
