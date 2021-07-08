@@ -3,6 +3,8 @@ from . import views
 
 app_name = 'quizz'
 urlpatterns = [
-    path('user-form/', views.UserFormView.as_view(), name='user-form'),
-    path('', views.hello, name='aaa')
+    path('player-form/', views.PlayerCreateView.as_view(), name='player-form'),
+    path('', views.main_menu, name='main-menu'),
+    path('start-quiz/', views.start_quiz, name='start-quiz'),
+    path('results-table/', views.ResultsListView.as_view(), name='results-table'),
 ]

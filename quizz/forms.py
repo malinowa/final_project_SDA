@@ -1,8 +1,9 @@
 from django import forms
-from quizz.models import User
+from quizz.models import Player
 
-class UserModelForm(forms.ModelForm):
+
+class PlayerModelForm(forms.ModelForm):
 
     class Meta:
-        model = User
-        fields = '__all__'
+        model = Player
+        fields = ('nickname', )

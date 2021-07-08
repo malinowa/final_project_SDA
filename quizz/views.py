@@ -1,27 +1,35 @@
 from django.shortcuts import render
-from django.views.generic import FormView
+from django.views.generic import FormView, CreateView, ListView
 from django.http import HttpResponse
 from django.urls import reverse_lazy
+from django.views import View
 
-from quizz.forms import UserModelForm
-from quizz.models import User
+from quizz.forms import PlayerModelForm
+from quizz.models import Player, Quiz, Question, Answer
 
-class UserFormView(FormView):
 
-    template_name = 'user-form.html'
-    form_class = UserModelForm
-    success_url = reverse_lazy('quizz:aaa')
+class PlayerCreateView(CreateView):
+    template_name = 'player-form.html'
+    form_class = PlayerModelForm
+    success_url = reverse_lazy('quizz:main-menu')
 
-    def form_valid(self, form):
-        result = super().form_valid(form)
-        name = form.cleaned_data['name']
-        surname = form.cleaned_data['surname']
-        age = form.cleaned_data['age']
-        User.objects.create(name=name, surname=surname, age=age)
-        return result
 
-def hello(request):
-    return HttpResponse('hello')
+def start_quiz(request):
+    return HttpResponse('Quizz started')
+
+
+def main_menu(request):
+    return render(
+        request,
+        template_name='main_menu.html',
+    )
+
+
+class ResultsListView(ListView):
+    model = Player
+    template_name = 'results-table.html'
+
+
 
 
 

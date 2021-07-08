@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p><a href="{% url 'quizz:start-quiz' %}">Start Quizz</a></p>
+    <p><a href="{% url 'quizz:results-table' %}">Check latest results</a></p>
+{% endblock %}
