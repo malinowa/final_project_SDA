@@ -10,10 +10,9 @@ class Player(models.Model):
 
 
 class Quiz(models.Model):
-    author = models.ForeignKey(Player, on_delete=models.DO_NOTHING, default=None)
+    author = models.ForeignKey(Player, on_delete=models.CASCADE, null=True, blank=True, related_name="quizzes", default=None)
     title = models.CharField(max_length=255, default='')
     created_at = models.DateTimeField(auto_now_add=True)
-    times_taken = models.IntegerField(default=0, editable=False)
 
     class Meta:
         verbose_name_plural = "Quizzes"
@@ -27,8 +26,10 @@ class Question(models.Model):
     quiz = models.ForeignKey(
         Quiz,
         related_name='questions',
-        on_delete=models.CASCADE
-    )
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
+        )
     question_text = models.CharField(max_length=255, default='')
 
     class Meta:
@@ -42,7 +43,9 @@ class Answer(models.Model):
     question = models.ForeignKey(
         Question,
         related_name='answers',
-        on_delete=models.DO_NOTHING
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
     )
     text = models.CharField(max_length=255)
     correct = models.BooleanField(default=False)

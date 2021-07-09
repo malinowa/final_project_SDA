@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p>{{ question }}</p>
+    {% for answer in answers %}
+        {% if next_question_pk != 6 %}
+            <li><a href="{% url 'quizz:question-show' pk=next_question_pk %}">{{ answer }}</a></li>
+        {% else %}
+            <li><a href="{% url 'quizz:congratulations-page' %}">{{ answer }}</a></li>
+        {% endif %}
+    {% endfor %}
+    <p></p>
+{% endblock %}

@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from quizz import urls
+from quizz.views import main_menu_redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('quizz/', include('quizz.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('', main_menu_redirect),
 ]

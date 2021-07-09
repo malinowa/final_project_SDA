@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     {% for user in object_list %}
-<p>{{ forloop.counter }}. Player: <b>'{{ user }}'</b> Points: <b>{{ forloop.counter0 }}</b></p>
+        <p>{{ forloop.counter }}. Player: <b>'{{ user }}'</b> Points: <b>{{ user.points }}</b></p>
     {% endfor %}
     <p><a href="{% url 'quizz:main-menu' %}">Back to menu</a></p>
 {% endblock %}
