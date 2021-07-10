@@ -42,17 +42,17 @@ def show_congratulations(request):
 class PlayerCreateView(CreateView):
     template_name = 'player_form.html'
     form_class = PlayerModelForm
-    success_url = f"/quizz/question-show/1"
+    success_url = "/quizz/question-show/1"
 
     def form_valid(self, form):
         result = super().form_valid(form)
-        quiz = Quiz.objects.create(author=self.object, title=f"{self.object.nickname}'s quiz!")
+        nickname = form.cleaned_data['nickname']
+        author = Player.objects.get(nickname=nickname)
+        quiz = Quiz.objects.create(author=author, title=f"{author.nickname}'s quiz!")
         questions = random.sample(list(Question.objects.all()), 5)
         for question in questions:
             question.quiz = quiz
             question.save()
-        for question in quiz.questions.all():
-            print(question)
         return result
 
 
