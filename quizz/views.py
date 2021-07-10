@@ -10,6 +10,7 @@ import random
 
 
 class QuestionShowView(View):
+
     def get(self, request, pk):
         quiz = Quiz.objects.all()[len(Quiz.objects.all()) - 1]
         question = quiz.questions.all()[int(pk)-1]
@@ -20,6 +21,14 @@ class QuestionShowView(View):
             template_name='question_template.html',
             context={'question': question, 'answers': answers, 'next_question_pk': next_question_pk},
         )
+
+    def post(self, request, pk):
+        answer = request.POST.get("question_button")
+        a = request.POST.get("next_question_pk")
+        print(a)
+
+
+
 
 
 def main_menu(request):

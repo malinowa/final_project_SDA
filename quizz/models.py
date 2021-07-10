@@ -3,7 +3,7 @@ from django.db import models
 
 class Player(models.Model):
     nickname = models.CharField(max_length=30)
-    points = models.PositiveSmallIntegerField()
+    points = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.nickname
@@ -26,7 +26,7 @@ class Question(models.Model):
     quiz = models.ForeignKey(
         Quiz,
         related_name='questions',
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         )

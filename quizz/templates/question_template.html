@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
+<form method="post">
+    {% csrf_token %}
     <p>{{ question }}</p>
     {% for answer in answers %}
-        {% if next_question_pk != 6 %}
-            <li><a href="{% url 'quizz:question-show' pk=next_question_pk %}">{{ answer }}</a></li>
-        {% else %}
-            <li><a href="{% url 'quizz:congratulations-page' %}">{{ answer }}</a></li>
-        {% endif %}
+        <p><input type="radio" name="question_button" id="answer"> <label for="answer">{{ answer }}</label></p>
     {% endfor %}
-    <p></p>
+    {% if next_question_pk <= 5%}
+        <p><input type="submit" value="next question"/></p>
+    {% else %}
+        <p><a href="{% url 'quizz:congratulations-page' %}">End quiz</a></p>
+    {% endif %}
+</form>
 {% endblock %}
