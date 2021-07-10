@@ -3,13 +3,13 @@
 <form method="post">
     {% csrf_token %}
     <p>{{ question }}</p>
-    {% for answer in answers %}
-        <p><input type="radio" name="question_button" id="answer"> <label for="answer">{{ answer }}</label></p>
-    {% endfor %}
-    {% if next_question_pk <= 5%}
-        <p><input type="submit" value="next question"/></p>
+    {{ form.answer }}
+    {% if next_question_pk != 1 %}
+        <input type="submit" value="Next Question">
     {% else %}
-        <p><a href="{% url 'quizz:congratulations-page' %}">End quiz</a></p>
+        <input type="submit" value="End quiz">
     {% endif %}
 </form>
 {% endblock %}
+
+

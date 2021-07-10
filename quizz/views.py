@@ -1,34 +1,46 @@
 from django.shortcuts import render
-from django.views.generic import FormView, CreateView, ListView
-from django.urls import reverse_lazy, reverse
+from django.views.generic import CreateView, ListView
+from django.urls import reverse
 from django.views import View
 from django.http import HttpResponseRedirect
 
-from quizz.forms import PlayerModelForm
+from quizz.forms import PlayerModelForm, QuestionForm
 from quizz.models import Player, Quiz, Question, Answer
 import random
 
 
 class QuestionShowView(View):
-
-    def get(self, request, pk):
+    def get(self, request, next_question_pk):
         quiz = Quiz.objects.all()[len(Quiz.objects.all()) - 1]
-        question = quiz.questions.all()[int(pk)-1]
-        answers = Answer.objects.filter(question=question)
-        next_question_pk = int(pk) + 1
+        question = random.choice(quiz.questions.all())
+        answers = self.__prepare_answers(question.id)
+        question.quiz = None
+        question.save()
+        form = QuestionForm(answers=answers)
         return render(
             request,
             template_name='question_template.html',
-            context={'question': question, 'answers': answers, 'next_question_pk': next_question_pk},
+            context={"form": form, 'question': question.question_text, 'next_question_pk': int(next_question_pk)}
         )
 
-    def post(self, request, pk):
-        answer = request.POST.get("question_button")
-        a = request.POST.get("next_question_pk")
-        print(a)
+    def __prepare_answers(self, question_id):
+        answers = Answer.objects.filter(question=question_id)
+        return [(answer.id, answer.text) for answer in answers]
 
+    def post(self, request, next_question_pk):
+        player = Player.objects.all()[len(Player.objects.all()) - 1]
 
+        answer_id = request.POST.get("answer")
+        answer = Answer.objects.get(id=answer_id)
+        print(answer)
 
+        if answer.correct:
+            player.points += 1
+            player.save()
+
+        if int(next_question_pk) == 1:
+            return HttpResponseRedirect(f'/quizz/congratulations-page/')
+        return HttpResponseRedirect(f'/quizz/question-show/{int(next_question_pk) - 1}')
 
 
 def main_menu(request):
@@ -39,19 +51,17 @@ def main_menu(request):
 
 
 def show_congratulations(request):
-    player = Player.objects.all()[len(Player.objects.all()) - 1]
-
     return render(
         request,
         template_name='congratulations_template.html',
-        context={},
+        context={'player': Player.objects.all()[len(Player.objects.all())- 1]},
     )
 
 
 class PlayerCreateView(CreateView):
     template_name = 'player_form.html'
     form_class = PlayerModelForm
-    success_url = "/quizz/question-show/1"
+    success_url = "/quizz/question-show/5"
 
     def form_valid(self, form):
         result = super().form_valid(form)
